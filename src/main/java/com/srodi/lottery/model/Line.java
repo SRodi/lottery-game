@@ -1,17 +1,14 @@
 package com.srodi.lottery.model;
 
+import com.srodi.lottery.rules.LotteryRules;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Entity
-public class Line {
-    private static final Random random = new Random();
-
+public class Line implements Comparable<Line>{
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -23,21 +20,29 @@ public class Line {
     @ManyToOne
     private LotteryTicket lotteryTicket;
 
-    public Line() {
-        this.numbers = new ArrayList<>();
-    }
+    private final int score;
 
     public Line(LotteryTicket lotteryTicket) {
-        this.numbers = List.of(
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3)
-        );
-
+        this.numbers = LotteryRules.generateRandomNumbers();
         this.lotteryTicket = lotteryTicket;
+        this.score = LotteryRules.generateScore(this.numbers);
+    }
+
+    public Line() {
+        this.numbers = new ArrayList<>();
+        this.score = 0;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     public List<Integer> getNumbers() {
         return numbers;
+    }
+
+    @Override
+    public int compareTo(Line line) {
+        return Integer.compare(this.score, line.score);
     }
 }
