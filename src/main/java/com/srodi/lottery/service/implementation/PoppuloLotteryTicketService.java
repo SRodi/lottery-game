@@ -56,9 +56,8 @@ public class PoppuloLotteryTicketService implements LotteryTicketService {
     public List<String> checkTicketStatus(UUID ticketId) {
         LotteryTicket ticket = validateTicket(ticketId);
 
-        if (!ticket.isChecked()) {
-            // check ticket and save
-            ticket.check();
+        if(!ticket.isChecked()){
+            ticket.setChecked(true);
             ticketRepository.save(ticket);
         }
 

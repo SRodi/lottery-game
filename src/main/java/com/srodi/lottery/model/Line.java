@@ -1,12 +1,16 @@
 package com.srodi.lottery.model;
 
 import com.srodi.lottery.rules.LotteryRules;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Getter @Setter @NoArgsConstructor
 @Entity
 public class Line implements Comparable<Line>{
     @Id
@@ -15,30 +19,17 @@ public class Line implements Comparable<Line>{
     private UUID lineId;
 
     @ElementCollection
-    private final List<Integer> numbers;
+    private List<Integer> numbers = new ArrayList<>();
 
     @ManyToOne
     private LotteryTicket lotteryTicket;
 
-    private final int score;
+    private int score = 0;
 
     public Line(LotteryTicket lotteryTicket) {
-        this.numbers = LotteryRules.generateRandomNumbers();
+        numbers = LotteryRules.generateRandomNumbers();
         this.lotteryTicket = lotteryTicket;
-        this.score = LotteryRules.generateScore(this.numbers);
-    }
-
-    public Line() {
-        this.numbers = new ArrayList<>();
-        this.score = 0;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public List<Integer> getNumbers() {
-        return numbers;
+        score = LotteryRules.generateScore(numbers);
     }
 
     @Override
