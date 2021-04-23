@@ -114,3 +114,11 @@ url=http://localhost:8081/status/"$id"
 curl -X PUT $url -sS
 ```
 
+## API documentation
+
+For API documentation and description I opted to enable `Swagger` which simply required `springdoc-openapi-ui` dependency. Swagger UI can be accessed at `http://$HOST:$PORT/swagger-ui.html`
+
+Swagger is an Interface Description Language for describing RESTful APIs expressed using JSON. Swagger is used together with a set of open-source software tools to design, build, document, and use RESTful web services. Swagger includes automated documentation, code generation, and test-case generation.
+
+![image info](./img/swagger-ui.png)
+
