@@ -1,4 +1,4 @@
-![REST interface Lottery System](https://github.com/srodi/rest-lottery/actions/workflows/ci.yaml/badge.svg)
+![REST interface Lottery System](https://github.com/srodi/lottery-game/actions/workflows/main.yaml/badge.svg)
 
 ## Lottery Game
 
