@@ -5,6 +5,7 @@ import com.srodi.lottery.exception.TicketNotFoundException;
 import com.srodi.lottery.model.LotteryTicket;
 import com.srodi.lottery.repository.LotteryTicketRepository;
 import com.srodi.lottery.service.LotteryTicketService;
+import lombok.var;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -39,7 +40,7 @@ public class PoppuloLotteryTicketService implements LotteryTicketService {
 
     @Override
     public LotteryTicket amendTicketById(UUID ticketId, int numLines) {
-        LotteryTicket ticket = validateTicket(ticketId);
+        var ticket = validateTicket(ticketId);
 
         if (ticket.isChecked()) {
             throw new TicketCheckedException(String.format("Ticket for ID: %s has already been checked and cannot be amended.", ticketId));
@@ -54,7 +55,7 @@ public class PoppuloLotteryTicketService implements LotteryTicketService {
 
     @Override
     public List<String> checkTicketStatus(UUID ticketId) {
-        LotteryTicket ticket = validateTicket(ticketId);
+        var ticket = validateTicket(ticketId);
 
         if(!ticket.isChecked()){
             ticket.setChecked(true);
