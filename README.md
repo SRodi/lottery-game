@@ -1,4 +1,4 @@
-![REST interface Lottery System](https://github.com/srodi/rest-lottery/actions/workflows/ci.yaml/badge.svg)
+![REST interface Lottery System](https://github.com/srodi/lottery-game/actions/workflows/main.yaml/badge.svg)
 
 ## Lottery Game
 
@@ -23,43 +23,38 @@ Implement a REST interface to generate a ticket with n lines. Additionally we wi
 The following `HTTP Requests` are available through this `RestAPI`:
 
 * **Create a ticket**
-
 ```http
 POST     /ticket
 ```
+  Body
 ```json
-body:
 {
     "numberOfLines": $NUM_LINES
 }
 ```
 
 * **Return list of tickets**
-
 ```http
 GET     /ticket
 ```
 
 * **Get individual ticket**
-
 ```http
 GET     /ticket/{id}
 ```
 
 * **Amend ticket lines**
-
 ```http
 PUT     /ticket/{id}
 ```
+  Body
 ```json
-body:
 {
     "numberOfLines": $NUM_LINES
 }
 ```
 
 * **Retrieve status of ticket**
-
 ```http
 PUT     /status/{id}
 ```
@@ -87,3 +82,43 @@ Alternatively you can use the image on `Dockerhub` which is pushed via `CI`.
 # expose app on port 8081 locally
 docker run -it --rm -p 8081:8080 srodi/rest-lottery:latest
 ```
+
+### Requests example
+
+If you are running locally and the app is exposed on port `8081` (for example using `Docker` image as described above), you can test using `cURL` and `jq` for response processing from the terminal.
+
+```bash
+# create ticket
+curl -X POST -H "Content-Type: application/json" \
+    -d '{"numberOfLines": 3}' \
+    http://localhost:8081/ticket -sS
+
+# get tickets
+curl http://localhost:8081/ticket -sS > response
+
+# manipulate the response to extract id of first
+id="$(cat response | jq '.[0].id')"
+id=$(sed -e 's/^"//' -e 's/"$//' <<< "$id")
+url=http://localhost:8081/ticket/"$id"
+
+# get ticket by id
+curl $url -sS
+
+# add lines to ticket
+curl -X PUT -H "Content-Type: application/json" \
+    -d '{"numberOfLines": 3}' \
+    $url -sS
+
+# check ticket status
+url=http://localhost:8081/status/"$id"
+curl -X PUT $url -sS
+```
+
+## API documentation
+
+For API documentation and description I opted to enable `Swagger` which simply required `springdoc-openapi-ui` dependency. Swagger UI can be accessed at `http://$HOST:$PORT/swagger-ui.html`
+
+Swagger is an Interface Description Language for describing RESTful APIs expressed using JSON. Swagger is used together with a set of open-source software tools to design, build, document, and use RESTful web services. Swagger includes automated documentation, code generation, and test-case generation.
+
+![image info](./img/swagger-ui.png)
+
