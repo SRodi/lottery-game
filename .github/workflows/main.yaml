@@ -37,4 +37,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: srodi/rest-lottery:${{ steps.vars.outputs.sha_short }}
+          tags: srodi/rest-lottery:latest,srodi/rest-lottery:${{ steps.vars.outputs.sha_short }}
